@@ -1,0 +1,197 @@
+# For full config options, check the docs:
+#    docs.serverless.com
+#
+
+service: todos-nodejs-rest-lambda
+
+# You can pin your service to only deploy with a specific Serverless version
+# Check out our docs for more details
+# frameworkVersion: "=X.X.X"
+
+provider:
+  name: aws
+  runtime: nodejs6.10
+  stage: dev
+  region: ap-southeast-2
+  profile: serverless-admin
+  memorySize: 64
+  timeout: 3
+  logRetentionInDays: 5
+
+# you can add statements to the Lambda function's IAM Role here
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource:
+        - { "Fn::GetAtt": ["DynamoDbUsers", "Arn"] }
+        - { "Fn::GetAtt": ["DynamoDbCategories", "Arn"] }
+        - { "Fn::GetAtt": ["DynamoDbTodos", "Arn"] }
+
+# you can define service wide environment variables here
+  environment:
+    USERS_TABLE: { "Ref" : "DynamoDbUsers" }
+    CATEGORIES_TABLE: { "Ref" : "DynamoDbCategories" }
+    TODOS_TABLE: { "Ref" : "DynamoDbTodos" }
+
+functions:
+# User functions
+  createUser:
+    handler: users/create.create
+    events:
+      - http:
+          path: users
+          method: post
+          cors: true
+
+  getUser:
+    handler: users/get.get
+    events:
+      - http:
+          path: users/{id}
+          method: get
+          cors: true
+
+  listUser:
+    handler: users/list.list
+    events:
+      - http:
+          path: users
+          method: get
+          cors: true
+
+  updateUser:
+    handler: users/update.update
+    events:
+      - http:
+          path: users/{id}
+          method: put
+          cors: true
+
+# Category functions
+  createCategory:
+    handler: categories/create.create
+    events:
+      - http:
+          path: categories
+          method: post
+          cors: true
+
+  getCategory:
+    handler: categories/get.get
+    events:
+      - http:
+          path: categories/{id}
+          method: get
+          cors: true
+
+  listCategory:
+    handler: categories/list.list
+    events:
+      - http:
+          path: categories
+          method: get
+          cors: true
+
+  updateCategory:
+    handler: categories/update.update
+    events:
+      - http:
+          path: categories/{id}
+          method: put
+          cors: true
+
+# Todo functions
+  createTodo:
+    handler: todos/create.create
+    events:
+      - http:
+          path: todos
+          method: post
+          cors: true
+
+  getTodo:
+    handler: todos/get.get
+    events:
+      - http:
+          path: todos/{id}
+          method: get
+          cors: true
+
+  listTodo:
+    handler: todos/list.list
+    events:
+      - http:
+          path: todos
+          method: get
+          cors: true
+
+  updateTodo:
+    handler: todos/update.update
+    events:
+      - http:
+          path: todos/{id}
+          method: put
+          cors: true
+
+  deleteTodo:
+    handler: todos/delete.delete
+    events:
+      - http:
+          path: todos/{id}
+          method: delete
+          cors: true
+
+# you can add CloudFormation resource templates here
+resources:
+  Resources:
+    DynamoDbUsers:
+      Type: AWS::DynamoDB::Table
+      DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: ${self:service}-${opt:stage, self:provider.stage}-users
+
+    DynamoDbCategories:
+      Type: AWS::DynamoDB::Table
+      DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: ${self:service}-${opt:stage, self:provider.stage}-categories
+
+    DynamoDbTodos:
+      Type: AWS::DynamoDB::Table
+      DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: ${self:service}-${opt:stage, self:provider.stage}-todos
+

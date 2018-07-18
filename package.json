@@ -1,0 +1,16 @@
+{
+  "name": "todos-nodejs-rest-lambda",
+  "version": "1.0.0",
+  "description": "Todos-REST-NodeJS-AWS-Lambda",
+  "main": "handler.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Aditya Pant",
+  "license": "ISC",
+  "dependencies": {
+    "aws-sdk": "^2.275.1",
+    "dateformat": "^3.0.3",
+    "uuid": "^3.3.2"
+  }
+}

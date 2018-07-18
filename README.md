@@ -41,6 +41,7 @@ Run following command to deploy NodeJS-Lambda functions to your AWS console
 
 Serverless framework will create all required configurations in your AWS account then deploy Lambda functions as well as REST API gateway endpoints.
 
+### Testing
 Copy these endpoint URLS from *terminal/command prompt* and use them to test Lambda functions. You could write your own REST API client in your favorite language `JavaScript, Java, Angular, ReactJS, Python, Ruby etc.` or directly test on AWS Lambda console or download *Advanced REST Client* or *Postman* (Google chrome extensions) to test these APIs as it is.
 
 ### Additional useful serverless commands

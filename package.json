@@ -9,7 +9,7 @@
   "author": "Aditya Pant",
   "license": "ISC",
   "dependencies": {
-    "aws-sdk": "^2.275.1",
+    "aws-sdk": "^2.814.0",
     "dateformat": "^3.0.3",
     "uuid": "^3.3.2"
   }
